@@ -1,22 +1,25 @@
 <script>
-  // In options API need to exports the default so that we can have access to data and methods in template
+  // In composition API need to wrap everything in setup
+
+
+  import {ref} from 'vue';
+
   export default {
-    data() {
-      return {
-        name: "John Doe",
-        status: "pending",
-        tasks: ["Task 1", "Task 2", "Task 3"],
-        link: 'https://www.google.com'
-      }
-    },
-    methods:{
-      toggleStatus (){
-        if(this.status === "active") this.status = "pending"
-        else if (this.status === "pending") this.status = "inactive"
-        else this.status = 'active'
-      }
+   setup(){
+    const name = ref("John Doe");
+    const status = ref("active");
+    const tasks = ref(['Task One', 'Task Two', 'Task Three']);
+
+    const toggleStatus = () => {
+      if(status.value === 'active') status.value = 'pending';
+      else if(status.value === 'pending') status.value = 'inactive';
+      else status.value = 'active';
     }
 
+    return {
+      name, status, tasks, toggleStatus
+    }
+   }
   }
 
 </script>
@@ -33,9 +36,6 @@
       {{ task }}
     </li>
   </ul>
-
-  <!-- <a v-bind:href="link">Click to google</a> -->
-  <a :href="link">Click to google</a>
 
   <!-- <button v-on:click="toggleStatus">Change Status</button> -->
   <button @click="toggleStatus">Change Status</button>
