@@ -1,26 +1,31 @@
-<script>
-  // In composition API need to wrap everything in setup
+<script setup>
+  // In composition API short way to use
 
 
   import {ref} from 'vue';
 
-  export default {
-   setup(){
-    const name = ref("John Doe");
-    const status = ref("active");
-    const tasks = ref(['Task One', 'Task Two', 'Task Three']);
 
-    const toggleStatus = () => {
-      if(status.value === 'active') status.value = 'pending';
-      else if(status.value === 'pending') status.value = 'inactive';
+  const name = ref("John Doe");
+  const status = ref("active");
+  const tasks = ref(['Task One', 'Task Two', 'Task Three']);
+  const newTask = ref('');
+
+  const toggleStatus = () => {
+    if(status.value === 'active') status.value = 'pending';
+     else if(status.value === 'pending') status.value = 'inactive';
       else status.value = 'active';
     }
 
-    return {
-      name, status, tasks, toggleStatus
+  const addTask = () => {
+    if(newTask.value.trim() !== ''){
+      tasks.value.push(newTask.value);
+      newTask.value = '';
     }
-   }
   }
+
+  const deleteTask = (index) =>{
+    tasks.value.splice(index, 1)
+   }
 
 </script>
 
@@ -30,10 +35,18 @@
   <p v-else-if="status === 'pending'">User is pending</p>
   <p v-else>User is inactive</p>
   
+  <form @submit.prevent="addTask">
+    <label for="newTask">Add Task</label>
+    <input type="text" id="newTask" name="newTask" v-model="newTask">
+    <button type="submit">Submit</button>
+  </form>
+
+
   <h3>Tasks:</h3>
   <ul>
-    <li v-for="task in tasks" :key="task">
-      {{ task }}
+    <li v-for="(task, index) in tasks" :key="task">
+      <span>{{ task }}</span>
+      <button @click="deleteTask(index)">X</button>
     </li>
   </ul>
 
